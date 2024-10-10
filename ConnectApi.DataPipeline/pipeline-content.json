@@ -18,7 +18,7 @@
             "datasetSettings": {
               "type": "RestResource",
               "typeProperties": {
-                "relativeUrl": "?mkt=en-IN&category=sports"
+                "relativeUrl": "?query=latest+news&freshness=Day"
               },
               "schema": [],
               "externalReferences": {
