@@ -1,0 +1,126 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "Copy",
+        "typeProperties": {
+          "source": {
+            "type": "RestSource",
+            "requestMethod": "GET",
+            "additionalHeaders": {
+              "Api_Key": "0a6aaec4497d479fb3e07d84495575a6"
+            },
+            "paginationRules": {
+              "supportRFC5988": "true"
+            },
+            "httpRequestTimeout": "00:01:40",
+            "requestInterval": "00.00:00:00.010",
+            "datasetSettings": {
+              "type": "RestResource",
+              "typeProperties": {
+                "relativeUrl": "/TrainPositions/TrainPositions?contentType=json"
+              },
+              "schema": [],
+              "externalReferences": {
+                "connection": "bc083b0d-8b48-47c5-83fe-26fae5cddf9b"
+              },
+              "annotations": []
+            }
+          },
+          "sink": {
+            "type": "JsonSink",
+            "storeSettings": {
+              "type": "LakehouseWriteSettings"
+            },
+            "formatSettings": {
+              "type": "JsonWriteSettings"
+            },
+            "datasetSettings": {
+              "type": "Json",
+              "typeProperties": {
+                "location": {
+                  "type": "LakehouseLocation",
+                  "folderPath": "Bronze",
+                  "fileName": "Source_Data.json"
+                }
+              },
+              "schema": {},
+              "linkedService": {
+                "properties": {
+                  "type": "Lakehouse",
+                  "typeProperties": {
+                    "artifactId": "107f648e-8cd0-41e5-a572-5237ae4b6646",
+                    "workspaceId": "00000000-0000-0000-0000-000000000000",
+                    "rootFolder": "Files"
+                  },
+                  "annotations": []
+                },
+                "name": "Project_Lakehouse"
+              },
+              "annotations": []
+            }
+          },
+          "enableStaging": false
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": true
+        },
+        "name": "Getting_Source_Data_From_Api",
+        "description": "Getting Realtime train status from Rest Api",
+        "dependsOn": []
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "27de920c-14b4-4020-9e36-733894f00845",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": true,
+          "secureOutput": true
+        },
+        "name": "ETL_Processing",
+        "dependsOn": [
+          {
+            "activity": "Getting_Source_Data_From_Api",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "Office365Outlook",
+        "typeProperties": {
+          "inputs": {
+            "body": {
+              "To": "gowthamsankar43@outlook.com",
+              "Subject": "ADF Pipeline Failure Alert",
+              "Body": "<p>Hello,</p>\n<p>The following pipeline activity has failed:</p>\n<ul>\n  <li><strong>Data Factory</strong>: @{pipeline().DataFactory}</li>\n  <li><strong>Pipeline</strong>: @{pipeline().Pipeline}</li>\n  <li><strong>Activity</strong>: 'Getting_Source_Data_From_Api'</li>\n  <li><strong>Error Message</strong>: @{activity('Getting_Source_Data_From_Api').error.message}</li>\n</ul>\n<p>Please check the Microsoft Fabric environment for more details.</p>\n<p>Best regards,</p>\n<p>Your Microsoft Fabric Monitoring Team<strong>@{pipeline().Pipeline}</strong><strong></strong><strong>@{pipeline().DataFactory}</strong><strong></strong></p>",
+              "Sensitivity": "",
+              "Importance": "Normal"
+            },
+            "method": "post",
+            "path": "/v2/Mail"
+          }
+        },
+        "name": "Office 365 Outlook1",
+        "dependsOn": [
+          {
+            "activity": "Getting_Source_Data_From_Api",
+            "dependencyConditions": [
+              "Failed"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

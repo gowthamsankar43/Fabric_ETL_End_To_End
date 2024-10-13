@@ -1,0 +1,221 @@
+{
+  "compatibilityLevel": 1604,
+  "model": {
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.135.7455.3 (Main)"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"DatabaseQuery\"]"
+      }
+    ],
+    "collation": "Latin1_General_100_BIN2_UTF8",
+    "culture": "en-US",
+    "cultures": [
+      {
+        "name": "en-US",
+        "linguisticMetadata": {
+          "content": {
+            "Language": "en-US",
+            "Version": "1.0.0"
+          },
+          "contentType": "json"
+        }
+      }
+    ],
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "expressions": [
+      {
+        "name": "DatabaseQuery",
+        "annotations": [
+          {
+            "name": "PBI_IncludeFutureArtifacts",
+            "value": "False"
+          }
+        ],
+        "expression": [
+          "let",
+          "    database = Sql.Database(\"N4PIRIZP7GOEJN7G5HPVN3NPGA-7TGAXADVSYAEXHMKBCHREVMEXY.datawarehouse.fabric.microsoft.com\", \"787c2f48-15ac-4cfb-8073-5d28dfc9854d\")",
+          "in",
+          "    database"
+        ],
+        "kind": "m",
+        "lineageTag": "3e2c5e9f-6099-4414-ab03-04d797abef71"
+      }
+    ],
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "real_time_status_fact",
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ],
+        "columns": [
+          {
+            "name": "TrainNumber",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "9df499c5-0d93-433c-b65a-c5552be4aa7d",
+            "sourceColumn": "TrainNumber",
+            "sourceLineageTag": "TrainNumber",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "TrainId",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "92e5301e-dc96-46a0-a626-f21b31e79ce8",
+            "sourceColumn": "TrainId",
+            "sourceLineageTag": "TrainId",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "CircuitId",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "917c1847-06fd-47b2-8731-de07f8101bae",
+            "sourceColumn": "CircuitId",
+            "sourceLineageTag": "CircuitId",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "ServiceType",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "47b61d98-4a09-4369-b8c1-69c0c544289b",
+            "sourceColumn": "ServiceType",
+            "sourceLineageTag": "ServiceType",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "DestinationStationCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "d7c57c05-d4e1-4f2f-8f72-eab55f5f08a4",
+            "sourceColumn": "DestinationStationCode",
+            "sourceLineageTag": "DestinationStationCode",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "LineCode",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "a88bc899-423a-47b1-b6b7-af9141b38624",
+            "sourceColumn": "LineCode",
+            "sourceLineageTag": "LineCode",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "CarCount",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "e74c6a5a-518b-4456-aa67-ee668fcc6d42",
+            "sourceColumn": "CarCount",
+            "sourceLineageTag": "CarCount",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "DirectionNum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "string",
+            "lineageTag": "94656eda-d184-40ee-8373-dfbe12643d09",
+            "sourceColumn": "DirectionNum",
+            "sourceLineageTag": "DirectionNum",
+            "sourceProviderType": "varchar(8000)",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "SecondsAtLocation",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ],
+            "dataType": "int64",
+            "formatString": "0",
+            "lineageTag": "db350d9b-1c72-4aaf-a2ad-e21b93f3d587",
+            "sourceColumn": "SecondsAtLocation",
+            "sourceLineageTag": "SecondsAtLocation",
+            "sourceProviderType": "int",
+            "summarizeBy": "sum"
+          }
+        ],
+        "lineageTag": "3700d04d-8791-4610-84e3-a7a04e6c2d10",
+        "partitions": [
+          {
+            "name": "real_time_status_fact",
+            "mode": "directLake",
+            "source": {
+              "entityName": "real_time_status_fact",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "dbo",
+              "type": "entity"
+            }
+          }
+        ],
+        "sourceLineageTag": "[dbo].[real_time_status_fact]"
+      }
+    ]
+  }
+}

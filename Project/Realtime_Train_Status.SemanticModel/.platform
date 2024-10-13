@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Realtime_Train_Status"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2e48647a-492c-46ea-b254-fca94a00c667"
+  }
+}
