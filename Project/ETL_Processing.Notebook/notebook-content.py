@@ -91,6 +91,7 @@ df_cleaned_final = df.select("processed.TrainNumber","processed.TrainId","proces
 
 # CELL ********************
 
+display(df_cleaned_final)
 
 # METADATA ********************
 
@@ -116,70 +117,48 @@ display(spark.sql("SELECT count(*) FROM Project_Lakehouse.real_time_status_fact"
 from pyspark.sql.utils import AnalysisException
 from delta.tables import DeltaTable
 
-
 try:
-    table_name='Project_Lakehouse.real_time_status_fact'
+    table_name = 'Project_Lakehouse.real_time_status_fact'
     df_cleaned_final.write.format("delta").saveAsTable(table_name)
 
 except AnalysisException:
     print("Table Already Exists")
-    # Assuming 'source_df' is your source DataFrame
-    deduplicated_source_df = df.dropDuplicates([
-    "TrainNumber", 
-    "TrainId", 
-    "CircuitId", 
-    "ServiceType", 
-    "DestinationStationCode", 
-    "LineCode", 
-    "CarCount", 
-    "DirectionNum", 
-    "SecondsAtLocation"
-])
 
+    # Deduplicate the source DataFrame using a more efficient approach
+    deduplicated_source_df = df_cleaned_final.distinct(
+        [
+            "processed.TrainNumber",
+            "processed.TrainId",
+            "processed.CircuitId",
+            "processed.ServiceType",
+            "processed.DestinationStationCode",
+            "processed.LineCode",
+            "processed.CarCount",
+            "processed.DirectionNum",
+            "processed.SecondsAtLocation"
+        ]
+    )
+
+    # Create a temporary view for the deduplicated DataFrame
     deduplicated_source_df.createOrReplaceTempView("cleaned_final")
-    # spark. sql(f""" MERGE INTO {table_name} target_table
-    #         USING cleaned_final source_view
-    #         ON source_view.TrainNumber = target_table.TrainNumber
-    #         WHEN MATCHED AND
-    #         source_view.TrainNumber <> target_table.TrainNumber OR
-    #         source_view.TrainId <> target_table.TrainId OR
-    #         source_view.CircuitId <> target_table.CircuitId OR
-    #         source_view.ServiceType <> target_table.ServiceType OR
-    #         source_view.DestinationStationCode > target_table.DestinationStationCode OR
-    #         source_view.LineCode <> target_table.LineCode OR
-    #         source_view.CarCount <> target_table.CarCount OR
-    #         source_view.DirectionNum <> target_table.DirectionNum OR
-    #         source_view.SecondsAtLocation <> target_table.SecondsAtLocation
-    #         THEN UPDATE SET *
-    #         """)
-target_table = DeltaTable.forPath(spark, "{table_name}")
-target_table.alias("target_table").merge(
-    source_view.alias("source_view"),
-    "source_view.TrainNumber = target_table.TrainNumber"
-).whenMatchedUpdate(
-    condition="""
-        source_view.TrainId <> target_table.TrainId OR
-        source_view.CircuitId <> target_table.CircuitId OR
-        source_view.ServiceType <> target_table.ServiceType OR
-        source_view.DestinationStationCode > target_table.DestinationStationCode OR
-        source_view.LineCode <> target_table.LineCode OR
-        source_view.CarCount <> target_table.CarCount OR
-        source_view.DirectionNum <> target_table.DirectionNum OR
-        source_view.SecondsAtLocation <> target_table.SecondsAtLocation
-    """,
-    set={
-        "TrainId": "source_view.TrainId",
-        "CircuitId": "source_view.CircuitId",
-        "ServiceType": "source_view.ServiceType",
-        "DestinationStationCode": "source_view.DestinationStationCode",
-        "LineCode": "source_view.LineCode",
-        "CarCount": "source_view.CarCount",
-        "DirectionNum": "source_view.DirectionNum",
-        "SecondsAtLocation": "source_view.SecondsAtLocation"
-    }
-).execute()
 
-
+    # Use SQL to perform the MERGE operation for better readability
+    spark.sql(f"""
+        MERGE INTO {table_name} target_table
+        USING cleaned_final source_view
+        ON source_view.TrainNumber = target_table.TrainNumber
+        WHEN MATCHED AND (
+            source_view.TrainId <> target_table.TrainId OR
+            source_view.CircuitId <> target_table.CircuitId OR
+            source_view.ServiceType <> target_table.ServiceType OR
+            source_view.DestinationStationCode > target_table.DestinationStationCode OR
+            source_view.LineCode <> target_table.LineCode OR
+            source_view.CarCount <> target_table.CarCount OR
+            source_view.DirectionNum <> target_table.DirectionNum OR
+            source_view.SecondsAtLocation <> target_table.SecondsAtLocation
+        )
+        THEN UPDATE SET *
+    """)
 
 # METADATA ********************
 
